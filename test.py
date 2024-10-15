@@ -14,9 +14,12 @@ from bs4 import BeautifulSoup
 from gtts import gTTS  # TTS 라이브러리 임포트
 import os  # 파일 시스템을 위한 라이브러리 임포트
 from dotenv import load_dotenv # dotenv 라이브러리 임포트
+import I2C_LCD_driver
 
 # .env 파일 로드
 load_dotenv()
+
+lcd = I2C_LCD_driver.lcd()
 
 # 환경변수로부터 API 키 설정
 bus_api_key = os.getenv("BUS_API_KEY")
@@ -319,6 +322,10 @@ def process_destination(destination):
     if buses_to_destination:
         bus_numbers = ', '.join(sorted(buses_to_destination))
         print(f"{destination} 주변 정류장으로 가는 버스 번호는 {bus_numbers}")
+        
+        # LCD에 버스 번호 출력
+        lcd.lcd_clear()
+        lcd.lcd_display_string(f"{bus_numbers}", 2)
         
         # TTS 기능 추가
         tts_text = f"{destination} 주변 정류장으로 가는 버스는 {bus_numbers}입니다."
