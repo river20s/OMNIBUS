@@ -13,20 +13,23 @@ import requests
 from bs4 import BeautifulSoup
 from gtts import gTTS  # TTS 라이브러리 임포트
 import os  # 파일 시스템을 위한 라이브러리 임포트
-from dotenv import load_dotenv # dotenv 라이브러리 임포트
 import I2C_LCD_driver
-
-# .env 파일 로드
-load_dotenv()
+from dotenv import load_dotenv
+import os
 
 lcd = I2C_LCD_driver.lcd()
-
-# 환경변수로부터 API 키 설정
+# .env 파일 불러오기 
+load_dotenv() 
+# API 키 환경변수 가져오기 
 bus_api_key = os.getenv("BUS_API_KEY")
 local_client_id = os.getenv("LOCAL_CLIENT_ID")
 local_client_secret = os.getenv("LOCAL_CLIENT_SECRET")
 geocode_client_id = os.getenv("GEOCODE_CLIENT_ID")
 geocode_client_secret = os.getenv("GEOCODE_CLIENT_SECRET")
+google_application_credentials = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = google_application_credentials
+
 
 # Audio recording parameters
 RATE = 16000
@@ -113,7 +116,7 @@ def listen_print_loop(responses, intent_detector):
 def play_prompt():
     print("Playing prompt...")
     pygame.mixer.init()
-    pygame.mixer.music.load("voice.mp3")  # 파일 경로에 맞게 수정
+    pygame.mixer.music.load("voice.mp3") 
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy():
         time.sleep(1)
